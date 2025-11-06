@@ -1,0 +1,109 @@
+package com.devex.todoapi.model;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Entity
+@Table(name = "tasks")
+public class Task {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String titulo;
+    private String descricao;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status;
+    @Column(updatable = false)
+    private LocalDateTime dataCriacao;
+    private LocalDateTime dataConclusao;
+
+    public Task() {
+
+    }
+
+    public Task(Long id, String titulo, String descricao, TaskStatus status, LocalDateTime dataCriacao, LocalDateTime dataConclusao) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.status = status;
+        this.dataCriacao = dataCriacao;
+        this.dataConclusao = dataConclusao;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataConclusao() {
+        return dataConclusao;
+    }
+
+    public void setDataConclusao(LocalDateTime dataConclusao) {
+        this.dataConclusao = dataConclusao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+        return Objects.equals(id, task.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", status=" + status +
+                ", dataCriacao=" + dataCriacao +
+                ", dataConclusao=" + dataConclusao +
+                '}';
+    }
+}
