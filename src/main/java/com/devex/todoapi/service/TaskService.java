@@ -2,6 +2,8 @@ package com.devex.todoapi.service;
 
 import com.devex.todoapi.dto.TaskRequestDTO;
 import com.devex.todoapi.dto.TaskResponseDTO;
+import com.devex.todoapi.exception.BusinessException;
+import com.devex.todoapi.exception.ResourceNotFoundException;
 import com.devex.todoapi.model.Task;
 import com.devex.todoapi.model.TaskStatus;
 import com.devex.todoapi.repository.TaskRepository;
@@ -27,7 +29,7 @@ public class TaskService {
     @Transactional(readOnly = true)
     public TaskResponseDTO findById(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Task de id " + id + " não encontrado")
+                () -> new ResourceNotFoundException("Task de id " + id + " não encontrado")
         );
         return new TaskResponseDTO(task);
     }
@@ -52,14 +54,14 @@ public class TaskService {
             return new TaskResponseDTO(task);
         }
         catch (Exception e) {
-            throw new RuntimeException("Task de id " + id + " não encontrado");
+            throw new ResourceNotFoundException("Task de id " + id + " não encontrado");
         }
     }
 
     @Transactional
     public void delete(Long id) {
         if (!taskRepository.existsById(id)) {
-           throw new RuntimeException("Task de id " + id + " não encontrado");
+           throw new ResourceNotFoundException("Task de id " + id + " não encontrado");
         }
         taskRepository.deleteById(id);
     }
@@ -67,10 +69,10 @@ public class TaskService {
     @Transactional
     public TaskResponseDTO markAsCompleted(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Task de id " + id + " não encontrado"));
+                () -> new ResourceNotFoundException("Task de id " + id + " não encontrado"));
 
         if (task.getStatus() == TaskStatus.CONCLUIDA) {
-                throw new RuntimeException("Task de id " + id + " já foi concluida");
+                throw new BusinessException("Task de id " + id + " já foi concluida");
         }
 
         task.setStatus(TaskStatus.CONCLUIDA);
