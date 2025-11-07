@@ -1,8 +1,15 @@
 package com.devex.todoapi.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class TaskRequestDTO {
 
+    @NotBlank(message = "Campo titulo não pode ser vazio")
+    @Size(min = 3, message = "Campo titulo precisa ter no mínimo 3 caracteres")
     private String titulo;
+
+    @Size(max = 255, message = "Campo descricao pode ter no máximo 255 caracteres")
     private String descricao;
 
     public TaskRequestDTO() {

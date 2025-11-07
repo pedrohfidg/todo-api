@@ -3,6 +3,7 @@ package com.devex.todoapi.controller;
 import com.devex.todoapi.dto.TaskRequestDTO;
 import com.devex.todoapi.dto.TaskResponseDTO;
 import com.devex.todoapi.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> create (@RequestBody TaskRequestDTO requestDTO) {
+    public ResponseEntity<TaskResponseDTO> create (@Valid @RequestBody TaskRequestDTO requestDTO) {
         TaskResponseDTO responseDTO = taskService.create(requestDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(responseDTO.getId()).toUri();
@@ -39,7 +40,7 @@ public class TaskController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<TaskResponseDTO> update(@PathVariable Long id, @RequestBody TaskRequestDTO requestDTO) {
+    public ResponseEntity<TaskResponseDTO> update(@PathVariable Long id, @Valid @RequestBody TaskRequestDTO requestDTO) {
         TaskResponseDTO responseDTO = taskService.update(id, requestDTO);
         return ResponseEntity.ok().body(responseDTO);
     }
