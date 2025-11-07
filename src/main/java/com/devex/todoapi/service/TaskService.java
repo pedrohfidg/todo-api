@@ -64,13 +64,30 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
+    @Transactional
+    public TaskResponseDTO markAsCompleted(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Task de id " + id + " não encontrado"));
+
+        if (task.getStatus() == TaskStatus.CONCLUIDA) {
+                throw new RuntimeException("Task de id " + id + " já foi concluida");
+        }
+
+        task.setStatus(TaskStatus.CONCLUIDA);
+        task.setDataConclusao(LocalDateTime.now());
+
+        task = taskRepository.save(task);
+
+        return new TaskResponseDTO(task);
+    }
+
     private void copyDtoToEntity(TaskRequestDTO requestDTO, Task task) {
         if (requestDTO.getTitulo() != null) {
                 task.setTitulo(requestDTO.getTitulo());
-            }
+        }
 
-            if (requestDTO.getDescricao() != null) {
-                task.setDescricao(requestDTO.getDescricao());
-            }
+        if (requestDTO.getDescricao() != null) {
+            task.setDescricao(requestDTO.getDescricao());
+        }
     }
 }
