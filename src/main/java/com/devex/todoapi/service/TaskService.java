@@ -6,13 +6,16 @@ import com.devex.todoapi.exception.BusinessException;
 import com.devex.todoapi.exception.ResourceNotFoundException;
 import com.devex.todoapi.model.Task;
 import com.devex.todoapi.model.TaskStatus;
+import com.devex.todoapi.model.User;
 import com.devex.todoapi.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class TaskService {
@@ -20,10 +23,15 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private AuthService authService;
+
     @Transactional(readOnly = true)
-    public List<TaskResponseDTO> findAll() {
-        List<Task> result = taskRepository.findAll();
-        return result.stream().map(x -> new TaskResponseDTO(x)).toList();
+    public Page<TaskResponseDTO> findAll(Pageable pageable) {
+        User userauthenticated = authService.authenticated();
+        Page<Task> result = taskRepository.findByUserId(userauthenticated.getId(), pageable);
+
+        return result.map(x -> new TaskResponseDTO(x));
     }
 
     @Transactional(readOnly = true)
@@ -31,15 +39,20 @@ public class TaskService {
         Task task = taskRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Task de id " + id + " não encontrado")
         );
+        authService.validateSelfOrAdmin(task.getUser().getId());
         return new TaskResponseDTO(task);
     }
 
     @Transactional
     public TaskResponseDTO create(TaskRequestDTO requestDTO) {
+        User user = authService.authenticated();
+
         Task task = new Task();
         copyDtoToEntity(requestDTO, task);
         task.setStatus(TaskStatus.PENDENTE);
         task.setDataCriacao(LocalDateTime.now());
+        task.setUser(user);
+
         task = taskRepository.save(task);
 
         return new TaskResponseDTO(task);
@@ -49,6 +62,7 @@ public class TaskService {
     public TaskResponseDTO update(Long id, TaskRequestDTO requestDTO) {
         try {
             Task task = taskRepository.getReferenceById(id);
+            authService.validateSelfOrAdmin(task.getUser().getId());
             copyDtoToEntity(requestDTO, task);
             task = taskRepository.save(task);
             return new TaskResponseDTO(task);
@@ -60,16 +74,23 @@ public class TaskService {
 
     @Transactional
     public void delete(Long id) {
-        if (!taskRepository.existsById(id)) {
-           throw new ResourceNotFoundException("Task de id " + id + " não encontrado");
+        Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task de id " + id + " não encontrado"));
+        authService.validateSelfOrAdmin(task.getUser().getId());
+
+        try {
+            taskRepository.deleteById(id);
         }
-        taskRepository.deleteById(id);
+        catch (DataIntegrityViolationException e) {
+            throw new BusinessException("Erro de integridade referencial");
+        }
     }
 
     @Transactional
     public TaskResponseDTO markAsCompleted(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Task de id " + id + " não encontrado"));
+
+        authService.validateSelfOrAdmin(task.getUser().getId());
 
         if (task.getStatus() == TaskStatus.CONCLUIDA) {
                 throw new BusinessException("Task de id " + id + " já foi concluida");

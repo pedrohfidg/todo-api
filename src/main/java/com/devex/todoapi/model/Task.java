@@ -20,6 +20,10 @@ public class Task {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataConclusao;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Task() {
 
     }
@@ -79,6 +83,14 @@ public class Task {
 
     public void setDataConclusao(LocalDateTime dataConclusao) {
         this.dataConclusao = dataConclusao;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

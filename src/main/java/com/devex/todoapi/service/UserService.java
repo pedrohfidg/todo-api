@@ -31,6 +31,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuthService authService;
+
     @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
@@ -53,6 +56,12 @@ public class UserService implements UserDetailsService {
         copyDtoToEntity(requestDTO, user);
         user.addRole(userRole);
         user = userRepository.save(user);
+        return new UserResponseDTO(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDTO getMe() {
+        User user = authService.authenticated();
         return new UserResponseDTO(user);
     }
 

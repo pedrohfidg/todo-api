@@ -5,10 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +31,9 @@ public class User implements UserDetails {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks = new ArrayList<>();
 
     public User() {
 
@@ -87,8 +87,8 @@ public class User implements UserDetails {
         this.atualizadoEm = Instant.now();
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public void addRole(Role role) {
@@ -102,6 +102,18 @@ public class User implements UserDetails {
             }
         }
         return false;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
     }
 
     @Override
