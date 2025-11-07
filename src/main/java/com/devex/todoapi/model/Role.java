@@ -1,12 +1,13 @@
 package com.devex.todoapi.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
