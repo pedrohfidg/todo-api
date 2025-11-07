@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Environment specific files (e.g., local configuration, sensitive data)
+.env
+application*.properties.example
+application*.yml.example
+*.properties
+*.yml
