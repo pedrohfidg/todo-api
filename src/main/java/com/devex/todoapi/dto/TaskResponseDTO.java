@@ -13,18 +13,20 @@ public class TaskResponseDTO {
     private TaskStatus status;
     private Instant dataCriacao;
     private Instant dataConclusao;
+    private UserResponseDTO user;
 
     public TaskResponseDTO() {
 
     }
 
-    public TaskResponseDTO(Long id, String titulo, String descricao, TaskStatus status, Instant dataCriacao, Instant dataConclusao) {
+    public TaskResponseDTO(Long id, String titulo, String descricao, TaskStatus status, Instant dataCriacao, Instant dataConclusao, UserResponseDTO user) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
         this.dataCriacao = dataCriacao;
         this.dataConclusao = dataConclusao;
+        this.user = user;
     }
 
     public TaskResponseDTO(Task entity) {
@@ -34,6 +36,7 @@ public class TaskResponseDTO {
         this.status = entity.getStatus();
         this.dataCriacao = entity.getDataCriacao();
         this.dataConclusao = entity.getDataConclusao();
+        this.user = new UserResponseDTO(entity.getUser());
     }
 
     public Long getId() {
@@ -82,5 +85,13 @@ public class TaskResponseDTO {
 
     public void setDataConclusao(Instant dataConclusao) {
         this.dataConclusao = dataConclusao;
+    }
+
+    public UserResponseDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserResponseDTO user) {
+        this.user = user;
     }
 }

@@ -26,3 +26,19 @@ INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user
 INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Treinar', 'Treino de perna na academia', 'PENDENTE', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', NULL, 2);
 
 INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Planejar projeto pessoal', 'Definir roadmap do projeto full stack', 'CONCLUIDA', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', 2);
+
+-- NOVOS SEEDS
+
+-- Admin
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Revisar servidor', 'Verificar logs e ajustar configurações no EC2', 'PENDENTE', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', NULL, 1);
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Atualizar relatórios', 'Atualizar dashboards no Power BI', 'CONCLUIDA', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', 1);
+
+-- Pedro
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Estudar React', 'Componentes, hooks e context API', 'PENDENTE', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', NULL, 2);
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Refatorar projeto de automação', 'Melhorias de logs e tratamento de erros', 'PENDENTE', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', NULL, 2);
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Backup de dados', 'Realizar backup da base para o S3', 'CONCLUIDA', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', 2);
+
+-- João
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Aprender Docker', 'Conceitos básicos de containers', 'PENDENTE', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', NULL, 3);
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Limpeza de email', 'Organizar caixa de entrada', 'CONCLUIDA', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', 3);
+INSERT INTO tasks (titulo, descricao, status, data_criacao, data_conclusao, user_id) VALUES ('Organizar agenda', 'Definir tarefas da semana', 'PENDENTE', CURRENT_TIMESTAMP AT TIME ZONE 'UTC', NULL, 3);

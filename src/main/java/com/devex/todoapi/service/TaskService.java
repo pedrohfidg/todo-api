@@ -27,18 +27,17 @@ public class TaskService {
     private AuthService authService;
 
     @Transactional(readOnly = true)
-    public Page<TaskResponseDTO> findAll(Pageable pageable) {
+    public Page<TaskResponseDTO> findAll(String titulo, String status, Pageable pageable) {
         User userauthenticated = authService.authenticated();
         Page<Task> result;
+        TaskStatus statusEnum = (status == null || status.isBlank() ? null : TaskStatus.valueOf(status));
 
         if (userauthenticated.hasRole("ROLE_ADMIN")) {
-            result = taskRepository.findAll(pageable);
+            result = taskRepository.findAllFiltered(titulo, statusEnum, pageable);
         }
         else {
-            result = taskRepository.findByUserId(userauthenticated.getId(), pageable);
+            result = taskRepository.findByUserIdAndFilters(titulo, statusEnum,userauthenticated.getId(), pageable);
         }
-
-
         return result.map(x -> new TaskResponseDTO(x));
     }
 

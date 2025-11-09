@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,11 @@ public class TaskController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping
-    public ResponseEntity<Page<TaskResponseDTO>> findAll(Pageable pageable) {
-        Page<TaskResponseDTO> responseDTOS = taskService.findAll(pageable);
+    public ResponseEntity<Page<TaskResponseDTO>> findAll(
+            @RequestParam(value = "titulo", required = false) String titulo,
+            @RequestParam(value = "status", required = false) String status,
+            @PageableDefault(page = 0, size = 25, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<TaskResponseDTO> responseDTOS = taskService.findAll(titulo, status, pageable);
         return ResponseEntity.ok().body(responseDTOS);
     }
 
