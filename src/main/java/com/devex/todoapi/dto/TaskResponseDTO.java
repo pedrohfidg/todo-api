@@ -3,7 +3,7 @@ package com.devex.todoapi.dto;
 import com.devex.todoapi.model.Task;
 import com.devex.todoapi.model.TaskStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class TaskResponseDTO {
 
@@ -11,14 +11,14 @@ public class TaskResponseDTO {
     private String titulo;
     private String descricao;
     private TaskStatus status;
-    private LocalDateTime dataCriacao;
-    private LocalDateTime dataConclusao;
+    private Instant dataCriacao;
+    private Instant dataConclusao;
 
     public TaskResponseDTO() {
 
     }
 
-    public TaskResponseDTO(Long id, String titulo, String descricao, TaskStatus status, LocalDateTime dataCriacao, LocalDateTime dataConclusao) {
+    public TaskResponseDTO(Long id, String titulo, String descricao, TaskStatus status, Instant dataCriacao, Instant dataConclusao) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -68,19 +68,19 @@ public class TaskResponseDTO {
         this.status = status;
     }
 
-    public LocalDateTime getDataCriacao() {
+    public Instant getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
+    public void setDataCriacao(Instant dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
-    public LocalDateTime getDataConclusao() {
+    public Instant getDataConclusao() {
         return dataConclusao;
     }
 
-    public void setDataConclusao(LocalDateTime dataConclusao) {
+    public void setDataConclusao(Instant dataConclusao) {
         this.dataConclusao = dataConclusao;
     }
 }

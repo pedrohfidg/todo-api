@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Service
 public class TaskService {
@@ -50,7 +50,7 @@ public class TaskService {
         Task task = new Task();
         copyDtoToEntity(requestDTO, task);
         task.setStatus(TaskStatus.PENDENTE);
-        task.setDataCriacao(LocalDateTime.now());
+        task.setDataCriacao(Instant.now());
         task.setUser(user);
 
         task = taskRepository.save(task);
@@ -97,7 +97,7 @@ public class TaskService {
         }
 
         task.setStatus(TaskStatus.CONCLUIDA);
-        task.setDataConclusao(LocalDateTime.now());
+        task.setDataConclusao(Instant.now());
 
         task = taskRepository.save(task);
 
