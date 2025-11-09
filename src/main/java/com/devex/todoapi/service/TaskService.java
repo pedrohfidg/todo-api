@@ -29,7 +29,15 @@ public class TaskService {
     @Transactional(readOnly = true)
     public Page<TaskResponseDTO> findAll(Pageable pageable) {
         User userauthenticated = authService.authenticated();
-        Page<Task> result = taskRepository.findByUserId(userauthenticated.getId(), pageable);
+        Page<Task> result;
+
+        if (userauthenticated.hasRole("ROLE_ADMIN")) {
+            result = taskRepository.findAll(pageable);
+        }
+        else {
+            result = taskRepository.findByUserId(userauthenticated.getId(), pageable);
+        }
+
 
         return result.map(x -> new TaskResponseDTO(x));
     }
