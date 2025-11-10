@@ -61,6 +61,7 @@ public class AuthorizationServerConfig {
     @Autowired
     private UserDetailsService userDetailsService; */
 
+    /*
     @Bean
     @Order(2)
     public SecurityFilterChain asSecurityFilterChain(HttpSecurity http, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) throws Exception {
@@ -78,6 +79,34 @@ public class AuthorizationServerConfig {
 
         return http.build();
     }
+
+     */
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain asSecurityFilterChain(HttpSecurity http, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) throws Exception {
+
+        // Aplica a segurança padrão da nova API
+        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+
+        // Reaplica seu fluxo customizado de password grant
+        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+                .tokenEndpoint(tokenEndpoint -> tokenEndpoint
+                        .accessTokenRequestConverter(new CustomPasswordAuthenticationConverter())
+                        .authenticationProvider(new CustomPasswordAuthenticationProvider(
+                                authorizationService(),
+                                tokenGenerator(),
+                                userDetailsService,
+                                passwordEncoder()
+                        ))
+                );
+
+        // Suporte a validação de tokens JWT
+        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+
+        return http.build();
+    }
+
 
     @Bean
     public OAuth2AuthorizationService authorizationService() {
